@@ -45,39 +45,7 @@
             overflow-x: hidden;
         }
 
-        /* Language Toggle Styles */
-        .lang-pt {
-            display: none;
-        }
 
-        body.show-pt .lang-en {
-            display: none;
-        }
-
-        body.show-pt .lang-pt {
-            display: inline;
-            /* or block depending on element, handled by JS/CSS specifics */
-        }
-
-        /* Make block-level elements display correctly */
-        body.show-pt h1.lang-pt,
-        body.show-pt h2.lang-pt,
-        body.show-pt h3.lang-pt,
-        body.show-pt h4.lang-pt,
-        body.show-pt p.lang-pt,
-        body.show-pt div.lang-pt,
-        body.show-pt li.lang-pt {
-            display: block;
-        }
-
-        body.show-pt span.lang-pt,
-        body.show-pt a.lang-pt {
-            display: inline;
-        }
-
-        body.show-pt a.btn.lang-pt {
-            display: inline-block;
-        }
 
 
         a {
@@ -585,6 +553,39 @@
             .about-grid {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Language Toggle Styles - Moved to end for specificity */
+        .lang-pt {
+            display: none !important;
+        }
+
+        body.show-pt .lang-en {
+            display: none !important;
+        }
+
+        body.show-pt .lang-pt {
+            display: inline !important;
+        }
+
+        /* Specific overrides for block elements */
+        body.show-pt h1.lang-pt,
+        body.show-pt h2.lang-pt,
+        body.show-pt h3.lang-pt,
+        body.show-pt h4.lang-pt,
+        body.show-pt p.lang-pt,
+        body.show-pt div.lang-pt,
+        body.show-pt li.lang-pt {
+            display: block !important;
+        }
+
+        body.show-pt span.lang-pt,
+        body.show-pt a.lang-pt {
+            display: inline !important;
+        }
+
+        body.show-pt a.btn.lang-pt {
+            display: inline-block !important;
         }
     </style>
 </head>
