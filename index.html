@@ -45,6 +45,41 @@
             overflow-x: hidden;
         }
 
+        /* Language Toggle Styles */
+        .lang-pt {
+            display: none;
+        }
+
+        body.show-pt .lang-en {
+            display: none;
+        }
+
+        body.show-pt .lang-pt {
+            display: inline;
+            /* or block depending on element, handled by JS/CSS specifics */
+        }
+
+        /* Make block-level elements display correctly */
+        body.show-pt h1.lang-pt,
+        body.show-pt h2.lang-pt,
+        body.show-pt h3.lang-pt,
+        body.show-pt h4.lang-pt,
+        body.show-pt p.lang-pt,
+        body.show-pt div.lang-pt,
+        body.show-pt li.lang-pt {
+            display: block;
+        }
+
+        body.show-pt span.lang-pt,
+        body.show-pt a.lang-pt {
+            display: inline;
+        }
+
+        body.show-pt a.btn.lang-pt {
+            display: inline-block;
+        }
+
+
         a {
             text-decoration: none;
             color: inherit;
@@ -95,6 +130,12 @@
             letter-spacing: -0.5px;
         }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -108,6 +149,33 @@
 
         .nav-links a:hover {
             color: var(--accent-color);
+        }
+
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            background-color: #F1F5F9;
+            border-radius: 20px;
+            padding: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .lang-option {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: var(--transition);
+            z-index: 1;
+        }
+
+        .lang-option.active {
+            color: var(--primary-color);
+            background-color: var(--white);
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         }
 
         .mobile-menu-btn {
@@ -167,6 +235,7 @@
             border-radius: 8px;
             transition: var(--transition);
             border: 2px solid var(--primary-color);
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -202,10 +271,38 @@
 
         .about-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 3rem;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            align-items: center;
+        }
+
+        .about-image {
+            width: 100%;
+            max-width: 350px;
+            height: 350px;
+            background-color: #E2E8F0;
+            border-radius: 20px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--white);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .placeholder-icon {
+            font-size: 4rem;
+            color: #94A3B8;
         }
 
         .about-text p {
@@ -448,7 +545,7 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-links {
+            .nav-right {
                 position: absolute;
                 top: 80px;
                 left: 0;
@@ -463,7 +560,13 @@
                 box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             }
 
-            .nav-links.active {
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+                width: 100%;
+            }
+
+            .nav-right.active {
                 transform: translateY(0);
             }
 
@@ -478,6 +581,10 @@
             .timeline {
                 margin-left: 1rem;
             }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -491,12 +598,33 @@
             <button class="mobile-menu-btn" aria-label="Toggle navigation">
                 ☰
             </button>
-            <div class="nav-links">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#skills" class="nav-link">Skills</a>
-                <a href="#education" class="nav-link">Education</a>
-                <a href="#portfolio" class="nav-link">Projects</a>
-                <a href="#contact" class="nav-link">Contact</a>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="#about" class="nav-link">
+                        <span class="lang-en">About</span>
+                        <span class="lang-pt">Sobre</span>
+                    </a>
+                    <a href="#skills" class="nav-link">
+                        <span class="lang-en">Skills</span>
+                        <span class="lang-pt">Habilidades</span>
+                    </a>
+                    <a href="#education" class="nav-link">
+                        <span class="lang-en">Education</span>
+                        <span class="lang-pt">Formação</span>
+                    </a>
+                    <a href="#portfolio" class="nav-link">
+                        <span class="lang-en">Projects</span>
+                        <span class="lang-pt">Projetos</span>
+                    </a>
+                    <a href="#contact" class="nav-link">
+                        <span class="lang-en">Contact</span>
+                        <span class="lang-pt">Contato</span>
+                    </a>
+                </div>
+                <div class="language-switcher" onclick="toggleLanguage()">
+                    <div class="lang-option active" id="btn-en">EN</div>
+                    <div class="lang-option" id="btn-pt">PT</div>
+                </div>
             </div>
         </nav>
     </header>
@@ -505,29 +633,60 @@
     <section id="hero">
         <div class="container hero-content">
             <h1>Gustavo Dal Pai</h1>
-            <h2>Data Scientist | BI Analyst | Production Engineer</h2>
-            <p class="hero-tagline">Transforming Data into Strategic Decisions through analytical precision and
+            <h2 class="lang-en">Data Scientist | BI Analyst | Production Engineer</h2>
+            <h2 class="lang-pt">Cientista de Dados | Analista de BI | Engenheiro de Produção</h2>
+
+            <p class="hero-tagline lang-en">Transforming Data into Strategic Decisions through analytical precision and
                 engineering efficiency.</p>
-            <a href="#portfolio" class="btn">View Portfolio</a>
+            <p class="hero-tagline lang-pt">Transformando Dados em Decisões Estratégicas através de precisão analítica e
+                eficiência de engenharia.</p>
+
+            <a href="#portfolio" class="btn lang-en">View Portfolio</a>
+            <a href="#portfolio" class="btn lang-pt">Ver Portfólio</a>
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
+            <h2 class="section-title lang-en">About Me</h2>
+            <h2 class="section-title lang-pt">Sobre Mim</h2>
             <div class="about-grid">
+                <div class="about-image">
+                    <!-- Placeholder Icon since image couldn't be retrieved -->
+                    <!-- <img src="your-photo.jpg" alt="Gustavo Dal Pai"> -->
+                    <div class="placeholder-content">
+                        <svg class="placeholder-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                </div>
                 <div class="about-text">
-                    <p>
+                    <p class="lang-en">
                         I am a Data Scientist and Production Engineer with a passion for transforming complex data into
                         actionable business insights. My background in engineering provides me with a structured
                         approach to problem-solving, while my expertise in Business Intelligence allows me to drive
                         efficiency and strategic growth.
                     </p>
-                    <p>
+                    <p class="lang-pt">
+                        Sou um Cientista de Dados e Engenheiro de Produção apaixonado por transformar dados complexos em
+                        insights de negócios acionáveis. Minha formação em engenharia me proporciona uma abordagem
+                        estruturada para a resolução de problemas, enquanto minha expertise em Business Intelligence me
+                        permite impulsionar a eficiência e o crescimento estratégico.
+                    </p>
+
+                    <p class="lang-en">
                         Transitioning from Production Engineering to the world of Data Science and BI, I focus on
                         optimizing processes, creating comprehensive dashboards, and managing data-driven projects. I
                         thrive in environments where precision, analysis, and efficient management are paramount.
+                    </p>
+                    <p class="lang-pt">
+                        Migrando da Engenharia de Produção para o mundo da Ciência de Dados e BI, foco em otimizar
+                        processos, criar dashboards abrangentes e gerenciar projetos orientados a dados. Prospero em
+                        ambientes onde precisão, análise e gestão eficiente são fundamentais.
                     </p>
                 </div>
             </div>
@@ -537,16 +696,19 @@
     <!-- Skills Section -->
     <section id="skills">
         <div class="container">
-            <h2 class="section-title">Core Skills</h2>
+            <h2 class="section-title lang-en">Core Skills</h2>
+            <h2 class="section-title lang-pt">Habilidades Principais</h2>
             <div class="skills-grid">
                 <div class="skill-card">
                     <h3>Power BI</h3>
                 </div>
                 <div class="skill-card">
-                    <h3>Data Analytics</h3>
+                    <h3 class="lang-en">Data Analytics</h3>
+                    <h3 class="lang-pt">Análise de Dados</h3>
                 </div>
                 <div class="skill-card">
-                    <h3>Project Management</h3>
+                    <h3 class="lang-en">Project Management</h3>
+                    <h3 class="lang-pt">Gestão de Projetos</h3>
                 </div>
                 <div class="skill-card">
                     <h3>SQL</h3>
@@ -555,7 +717,8 @@
                     <h3>Python</h3>
                 </div>
                 <div class="skill-card">
-                    <h3>Process Optimization</h3>
+                    <h3 class="lang-en">Process Optimization</h3>
+                    <h3 class="lang-pt">Otimização de Processos</h3>
                 </div>
                 <div class="skill-card">
                     <h3>Microsoft Excel</h3>
@@ -564,7 +727,8 @@
                     <h3>Agile / Scrum</h3>
                 </div>
                 <div class="skill-card">
-                    <h3>Dashboard Creation</h3>
+                    <h3 class="lang-en">Dashboard Creation</h3>
+                    <h3 class="lang-pt">Criação de Dashboards</h3>
                 </div>
                 <div class="skill-card">
                     <h3>Business Intelligence</h3>
@@ -576,26 +740,35 @@
     <!-- Education Section -->
     <section id="education">
         <div class="container">
-            <h2 class="section-title">Education</h2>
+            <h2 class="section-title lang-en">Education</h2>
+            <h2 class="section-title lang-pt">Formação Acadêmica</h2>
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
-                        <h3>MBA in Project Management</h3>
+                        <h3 class="lang-en">MBA in Project Management</h3>
+                        <h3 class="lang-pt">MBA em Gestão de Projetos</h3>
                         <h4>USP - Universidade de São Paulo</h4>
-                        <span class="timeline-date">Graduate School</span>
-                        <p>Advanced specialization in managing complex projects, strategic planning, and leadership
-                            excellence.</p>
+                        <span class="timeline-date lang-en">Graduate School</span>
+                        <span class="timeline-date lang-pt">Pós-Graduação</span>
+                        <p class="lang-en">Advanced specialization in managing complex projects, strategic planning, and
+                            leadership excellence.</p>
+                        <p class="lang-pt">Especialização avançada em gestão de projetos complexos, planejamento
+                            estratégico e excelência em liderança.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
-                        <h3>Bachelor's in Production Engineering</h3>
+                        <h3 class="lang-en">Bachelor's in Production Engineering</h3>
+                        <h3 class="lang-pt">Bacharelado em Engenharia de Produção</h3>
                         <h4>UFOP - Universidade Federal de Ouro Preto</h4>
-                        <span class="timeline-date">Undergraduate Degree</span>
-                        <p>Strong foundation in operations research, statistical quality control, and process
-                            engineering.</p>
+                        <span class="timeline-date lang-en">Undergraduate Degree</span>
+                        <span class="timeline-date lang-pt">Graduação</span>
+                        <p class="lang-en">Strong foundation in operations research, statistical quality control, and
+                            process engineering.</p>
+                        <p class="lang-pt">Base sólida em pesquisa operacional, controle estatístico de qualidade e
+                            engenharia de processos.</p>
                     </div>
                 </div>
             </div>
@@ -605,18 +778,23 @@
     <!-- Portfolio Section -->
     <section id="portfolio">
         <div class="container">
-            <h2 class="section-title">Featured Projects</h2>
+            <h2 class="section-title lang-en">Featured Projects</h2>
+            <h2 class="section-title lang-pt">Projetos em Destaque</h2>
             <div class="projects-grid">
                 <!-- Project 1 -->
                 <div class="project-card">
                     <img src="images/project-bi.png" alt="Corporate BI Dashboards" class="project-image">
                     <div class="project-content">
                         <div class="project-header">
-                            <h3 class="project-title">Corporate BI Dashboards</h3>
+                            <h3 class="project-title lang-en">Corporate BI Dashboards</h3>
+                            <h3 class="project-title lang-pt">Dashboards Corporativos de BI</h3>
                         </div>
-                        <p class="project-desc">Designed and implemented an advanced Power BI dashboard suite for
-                            real-time decision making. Integrated multiple data sources to provide a unified view of
+                        <p class="project-desc lang-en">Designed and implemented an advanced Power BI dashboard suite
+                            for real-time decision making. Integrated multiple data sources to provide a unified view of
                             KPIs, reducing reporting time by 40%.</p>
+                        <p class="project-desc lang-pt">Desenvolvimento de uma suíte de dashboards avançados em Power BI
+                            para tomada de decisão em tempo real. Integração de múltiplas fontes de dados para uma visão
+                            unificada de KPIs, reduzindo o tempo de relatórios em 40%.</p>
                         <div class="project-tags">
                             <span class="tag">Power BI</span>
                             <span class="tag">DAX</span>
@@ -630,11 +808,15 @@
                     <img src="images/project-monitoring.png" alt="R&D Project Monitoring" class="project-image">
                     <div class="project-content">
                         <div class="project-header">
-                            <h3 class="project-title">R&D Project Monitoring</h3>
+                            <h3 class="project-title lang-en">R&D Project Monitoring</h3>
+                            <h3 class="project-title lang-pt">Monitoramento de Projetos de P&D</h3>
                         </div>
-                        <p class="project-desc">Developed an optimized tracking system for Research & Development
-                            initiatives. The solution improved resource allocation and provided transparency into
-                            project milestones and bottlenecks.</p>
+                        <p class="project-desc lang-en">Developed an optimized tracking system for Research &
+                            Development initiatives. The solution improved resource allocation and provided transparency
+                            into project milestones and bottlenecks.</p>
+                        <p class="project-desc lang-pt">Desenvolvimento de um sistema de rastreamento otimizado para
+                            iniciativas de P&D. A solução melhorou a alocação de recursos e proporcionou transparência
+                            sobre marcos e gargalos do projeto.</p>
                         <div class="project-tags">
                             <span class="tag">Project Management</span>
                             <span class="tag">Excel</span>
@@ -648,11 +830,15 @@
                     <img src="images/project-analysis.png" alt="Process Optimization Analysis" class="project-image">
                     <div class="project-content">
                         <div class="project-header">
-                            <h3 class="project-title">Process Optimization Analysis</h3>
+                            <h3 class="project-title lang-en">Process Optimization Analysis</h3>
+                            <h3 class="project-title lang-pt">Análise de Otimização de Processos</h3>
                         </div>
-                        <p class="project-desc">Conducted a comprehensive statistical analysis of production processes.
-                            Identified inefficiencies and recommended procedural changes that resulted in a 15% increase
-                            in operational efficiency.</p>
+                        <p class="project-desc lang-en">Conducted a comprehensive statistical analysis of production
+                            processes. Identified inefficiencies and recommended procedural changes that resulted in a
+                            15% increase in operational efficiency.</p>
+                        <p class="project-desc lang-pt">Realização de uma análise estatística abrangente dos processos
+                            de produção. Identificação de ineficiências e recomendação de mudanças procedimentais que
+                            resultaram em um aumento de 15% na eficiência operacional.</p>
                         <div class="project-tags">
                             <span class="tag">Python</span>
                             <span class="tag">Statistics</span>
@@ -667,17 +853,22 @@
     <!-- Contact Section -->
     <section id="contact">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
+            <h2 class="section-title lang-en">Get In Touch</h2>
+            <h2 class="section-title lang-pt">Entre em Contato</h2>
             <div class="contact-content">
-                <p>Interested in collaborating or discussing data strategies? Feel free to reach out through LinkedIn or
-                    email.</p>
+                <p class="lang-en">Interested in collaborating or discussing data strategies? Feel free to reach out
+                    through LinkedIn or email.</p>
+                <p class="lang-pt">Interessado em colaborar ou discutir estratégias de dados? Sinta-se à vontade para
+                    entrar em contato pelo LinkedIn ou e-mail.</p>
                 <div class="contact-links">
                     <a href="https://www.linkedin.com/in/gustavodalpai/" target="_blank"
                         class="contact-btn linkedin-btn">
-                        LinkedIn Profile
+                        <span class="lang-en">LinkedIn Profile</span>
+                        <span class="lang-pt">Perfil LinkedIn</span>
                     </a>
                     <a href="mailto:gustavodalpai@gmail.com" class="contact-btn email-btn">
-                        Send Email
+                        <span class="lang-en">Send Email</span>
+                        <span class="lang-pt">Enviar E-mail</span>
                     </a>
                 </div>
             </div>
@@ -692,25 +883,55 @@
     </footer>
 
     <script>
+        // Use a simple state variable for language
+        let currentLang = 'en';
+
+        function toggleLanguage(lang) {
+            // If explicit lang provided, use it, otherwise toggle
+            if (lang) {
+                currentLang = lang;
+            } else {
+                currentLang = currentLang === 'en' ? 'pt' : 'en';
+            }
+
+            // Update UI
+            if (currentLang === 'pt') {
+                document.body.classList.add('show-pt');
+                document.getElementById('btn-en').classList.remove('active');
+                document.getElementById('btn-pt').classList.add('active');
+            } else {
+                document.body.classList.remove('show-pt');
+                document.getElementById('btn-pt').classList.remove('active');
+                document.getElementById('btn-en').classList.add('active');
+            }
+
+            // Save preference
+            localStorage.setItem('preferredLanguage', currentLang);
+        }
+
+        // Initialize from local storage or default to EN
+        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+        toggleLanguage(savedLang);
+
         // Mobile Menu Toggle
         const mobileBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
+        const navRight = document.querySelector('.nav-right');
         const navLinksItems = document.querySelectorAll('.nav-link');
 
         mobileBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            mobileBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+            navRight.classList.toggle('active');
+            mobileBtn.textContent = navRight.classList.contains('active') ? '✕' : '☰';
         });
 
         // Close mobile menu when a link is clicked
         navLinksItems.forEach(link => {
             link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
+                navRight.classList.remove('active');
                 mobileBtn.textContent = '☰';
             });
         });
 
-        // Smooth Scrolling for anchor links (polyfill for older browsers if needed, but CSS version handles most)
+        // Smooth Scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
